@@ -12,7 +12,7 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
   using SafeMath for uint;
 
   string public constant name = "AnythingAppTokenPreSale";
-  
+
   AnythingAppToken public token;
   InvestorWhiteList public investorWhiteList;
   address public beneficiary;
@@ -23,6 +23,7 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
   uint public ethUsdRate;
 
   uint public collected = 0;
+  uint public withdrawn = 0;
   uint public tokensSold = 0;
   uint public investorCount = 0;
   uint public weiRefunded = 0;
@@ -160,7 +161,18 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
     return _tokens.mul(20).div(100);
   }
 
-  function withdraw() external onlyOwner preSaleEnded {
+  function withdraw() external onlyOwner {
+    uint withdrawLimit = 500 ether;
+    if (withdrawn < withdrawLimit) {
+      uint toWithdraw = collected.sub(withdrawn);
+      if (toWithdraw + withdrawn > withdrawLimit) {
+        toWithdraw = withdrawLimit.sub(withdrawn);
+      }
+      beneficiary.transfer(toWithdraw);
+      withdrawn = withdrawn.add(toWithdraw);
+      return;
+    }
+    require(block.timestamp >= endTime);
     beneficiary.transfer(collected);
     token.transfer(beneficiary, token.balanceOf(this));
     crowdsaleFinished = true;
