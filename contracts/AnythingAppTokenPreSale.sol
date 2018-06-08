@@ -44,8 +44,8 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
   uint public secondStage;
   uint public thirdStage;
 
-  uint public constant MINIMAL_PURCHASE = 20 ether;
-  uint public constant LIMIT_PER_USER = 500 ether;
+  uint public constant MINIMAL_PURCHASE = 250 ether;
+  uint public constant LIMIT_PER_USER = 500000 ether;
 
   event NewContribution(address indexed holder, uint tokenAmount, uint etherAmount);
   event NewReferralTransfer(address indexed investor, address indexed referral, uint tokenAmount);
