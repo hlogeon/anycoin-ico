@@ -109,9 +109,6 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
     uint tokens = msg.value.mul(ethUsdRate).div(tokenPriceUsd);
     address referral = investorWhiteList.getReferralOf(msg.sender);
     uint referralBonus = calculateReferralBonus(tokens);
-    uint bonus = calculateBonus(tokens, referral);
-
-    tokens = tokens.add(bonus);
 
     uint newTokensSold = tokensSold.add(tokens);
     if (referralBonus > 0 && referral != 0x0) {
@@ -133,24 +130,6 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
       token.transfer(referral, referralBonus);
       NewReferralTransfer(msg.sender, referral, referralBonus);
     }
-  }
-
-  function calculateBonus(uint _tokens, address _referral) private returns (uint _bonuses) {
-    uint bonus;
-
-    if (tokensSold < firstStage) {
-      bonus = BONUS_LEVEL_1;
-    } else if (tokensSold >= firstStage && tokensSold < secondStage) {
-      bonus = BONUS_LEVEL_2;
-    } else {
-      bonus = BONUS_LEVEL_3;
-    }
-
-    if (_referral != 0x0) {
-      bonus += 5;
-    }
-
-    return _tokens.mul(bonus).div(100);
   }
 
   function calculateReferralBonus(uint _tokens) internal constant returns (uint _bonus) {
