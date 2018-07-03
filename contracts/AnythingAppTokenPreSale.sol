@@ -36,14 +36,6 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
   mapping (address => bool) public refunded;
   mapping (address => uint) public deposited;
 
-  uint public constant BONUS_LEVEL_1 = 40;
-  uint public constant BONUS_LEVEL_2 = 35;
-  uint public constant BONUS_LEVEL_3 = 30;
-
-  uint public firstStage;
-  uint public secondStage;
-  uint public thirdStage;
-
   uint public constant MINIMAL_PURCHASE = 250 ether;
   uint public constant LIMIT_PER_USER = 500000 ether;
 
@@ -73,10 +65,6 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
 
     uint _baseEthUsdPrice,
 
-    uint _firstStage,
-    uint _secondStage,
-    uint _thirdStage,
-
     uint _startTime,
     uint _endTime
   ) {
@@ -88,10 +76,6 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
     token = AnythingAppToken(_token);
     investorWhiteList = InvestorWhiteList(_investorWhiteList);
     beneficiary = _beneficiary;
-
-    firstStage = _firstStage.mul(1 ether);
-    secondStage = _secondStage.mul(1 ether);
-    thirdStage = _thirdStage.mul(1 ether);
 
     startTime = _startTime;
     endTime = _endTime;
