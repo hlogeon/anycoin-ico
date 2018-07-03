@@ -62,10 +62,6 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
     _;
   }
 
-  modifier inWhiteList() {
-    require(investorWhiteList.isAllowed(msg.sender));
-    _;
-  }
 
   function AnythingAppTokenPreSale(
     address _token,
@@ -101,7 +97,7 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
     endTime = _endTime;
   }
 
-  function() payable inWhiteList {
+  function() payable {
     doPurchase(msg.sender);
   }
 
