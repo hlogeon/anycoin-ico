@@ -122,7 +122,7 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
 
   function withdraw() external onlyOwner {
     uint withdrawLimit = 500 ether;
-    if (withdrawn < withdrawLimit) {
+    if (withdrawn < withdrawLimit && block.timestamp < endTime) {
       uint toWithdraw = collected.sub(withdrawn);
       if (toWithdraw + withdrawn > withdrawLimit) {
         toWithdraw = withdrawLimit.sub(withdrawn);
@@ -135,19 +135,6 @@ contract AnythingAppTokenPreSale is Haltable, PriceReceiver {
     beneficiary.transfer(collected);
     token.transfer(beneficiary, token.balanceOf(this));
     crowdsaleFinished = true;
-  }
-
-  function refund() external preSaleEnded inNormalState {
-    require(refunded[msg.sender] == false);
-
-    uint refund = deposited[msg.sender];
-    require(refund > 0);
-
-    deposited[msg.sender] = 0;
-    refunded[msg.sender] = true;
-    weiRefunded = weiRefunded.add(refund);
-    msg.sender.transfer(refund);
-    Refunded(msg.sender, refund);
   }
 
   function receiveEthPrice(uint ethUsdPrice) external onlyEthPriceProvider {
